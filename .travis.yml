@@ -13,7 +13,9 @@ env:
   - DJANGO=master
 matrix:
   allow_failures:
-    - python: "pypy3"
+    - python:
+      - "pypy3"
+      - "nightly"
     - env: DJANGO=master
 cache:
   directories:
