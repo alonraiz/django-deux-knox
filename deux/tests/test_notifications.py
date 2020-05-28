@@ -1,7 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
 from mock import Mock, patch
-from twilio.rest.exceptions import TwilioRestException
+from twilio.base.exceptions import TwilioRestException
 
 from deux.app_settings import mfa_settings
 from deux.exceptions import InvalidPhoneNumberError, TwilioMessageError
