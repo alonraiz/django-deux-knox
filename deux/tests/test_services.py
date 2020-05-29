@@ -30,7 +30,7 @@ class GenerateMFACodeTests(TestCase):
     def test_time_based_mfa_code(self):
         mfa_code_0 = generate_mfa_code(self.bin_key, drift=0)
         mfa_code_1 = generate_mfa_code(self.bin_key, drift=1)
-        self.assertNotEquals(mfa_code_0, mfa_code_1)
+        self.assertNotEqual(mfa_code_0, mfa_code_1)
 
 
 class VerifyMFACodeTests(TestCase):

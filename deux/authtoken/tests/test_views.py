@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 import six
 from mock import patch
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from rest_framework import status
 
 from deux.app_settings import mfa_settings

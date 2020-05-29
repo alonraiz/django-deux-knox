@@ -1,2 +1,6 @@
+django-oauth-toolkit>=0.10.0
+django-otp>=0.3.5
+six>=1.10.0
+twilio~=6.41
 coverage>=3.0
 codecov

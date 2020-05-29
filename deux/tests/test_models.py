@@ -52,7 +52,7 @@ class MultiFactorAuthTests(BaseUserTestCase):
         current_code = self.mfa.backup_code
         new_code = self.mfa.refresh_backup_code()
         self.assertIsNotNone(new_code)
-        self.assertNotEquals(current_code, new_code)
+        self.assertNotEqual(current_code, new_code)
 
     def test_check_and_use_backup_code(self):
         self.mfa.enable(SMS)

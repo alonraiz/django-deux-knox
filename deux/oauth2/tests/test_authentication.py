@@ -7,7 +7,7 @@ from base64 import b64encode
 from mock import patch
 from oauth2_provider.models import get_application_model
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from rest_framework import status
 
 from deux.app_settings import mfa_settings

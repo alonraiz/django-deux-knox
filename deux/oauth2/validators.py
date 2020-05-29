@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 from oauth2_provider.oauth2_validators import OAuth2Validator
 
 from django.contrib.auth import authenticate
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 
 from deux import strings
 from deux.oauth2.exceptions import (
@@ -50,7 +50,7 @@ class MFAOAuth2Validator(OAuth2Validator):
 
         user = authenticate(username=username, password=password)
         if not (user and user.is_active):
-            raise InvalidLoginError(force_text(
+            raise InvalidLoginError(force_str(
                 strings.INVALID_CREDENTIALS_ERROR))
 
         mfa = None
@@ -62,15 +62,15 @@ class MFAOAuth2Validator(OAuth2Validator):
             backup_code = request.extra_credentials.get("backup_code")
 
             if mfa_code and backup_code:
-                raise InvalidLoginError(force_text(strings.BOTH_CODES_ERROR))
+                raise InvalidLoginError(force_str(strings.BOTH_CODES_ERROR))
             elif mfa_code:
                 bin_key = mfa.get_bin_key(mfa.challenge_type)
                 if not verify_mfa_code(bin_key, mfa_code):
-                    raise InvalidLoginError(force_text(
+                    raise InvalidLoginError(force_str(
                         strings.INVALID_MFA_CODE_ERROR))
             elif backup_code:
                 if not mfa.check_and_use_backup_code(backup_code):
-                    raise InvalidLoginError(force_text(
+                    raise InvalidLoginError(force_str(
                         strings.INVALID_BACKUP_CODE_ERROR))
             else:
                 challenge = MultiFactorChallenge(mfa, mfa.challenge_type)
