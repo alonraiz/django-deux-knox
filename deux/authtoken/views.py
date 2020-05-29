@@ -1,8 +1,11 @@
 from __future__ import absolute_import, unicode_literals
 
+from django.contrib.auth.signals import user_logged_in
 from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.authtoken.models import Token
+from rest_framework.serializers import DateTimeField
 from rest_framework.response import Response
+from knox.settings import knox_settings
+from knox.models import AuthToken
 
 from deux.authtoken.serializers import MFAAuthTokenSerializer
 
@@ -39,5 +42,13 @@ class ObtainMFAAuthToken(ObtainAuthToken):
             })
         else:
             user = serializer.validated_data['user']
-            token, created = Token.objects.get_or_create(user=user)
-            return Response({"token": token.key})
+            token_ttl = self.get_token_ttl()
+            instance, token = AuthToken.objects.create(user, token_ttl)
+            user_logged_in.send(sender=request.user.__class__, request=request, user=user)
+
+            datetime_format = knox_settings.EXPIRY_DATETIME_FORMAT
+
+            return Response({
+                'expiry': DateTimeField(format=datetime_format).to_representation(instance.expiry),
+                'token': token
+            })
