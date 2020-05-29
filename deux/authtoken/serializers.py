@@ -1,6 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from rest_framework import serializers
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 
@@ -55,16 +55,16 @@ class MFAAuthTokenSerializer(AuthTokenSerializer):
 
             if mfa_code and backup_code:
                 raise serializers.ValidationError(
-                    force_text(strings.BOTH_CODES_ERROR))
+                    force_str(strings.BOTH_CODES_ERROR))
             elif mfa_code:
                 bin_key = mfa.get_bin_key(mfa.challenge_type)
                 if not verify_mfa_code(bin_key, mfa_code):
                     raise serializers.ValidationError(
-                        force_text(strings.INVALID_MFA_CODE_ERROR))
+                        force_str(strings.INVALID_MFA_CODE_ERROR))
             elif backup_code:
                 if not mfa.check_and_use_backup_code(backup_code):
                     raise serializers.ValidationError(
-                        force_text(strings.INVALID_BACKUP_CODE_ERROR))
+                        force_str(strings.INVALID_BACKUP_CODE_ERROR))
             else:
                 challenge = MultiFactorChallenge(mfa, mfa.challenge_type)
                 challenge.generate_challenge()
