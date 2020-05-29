@@ -42,7 +42,7 @@ class ObtainMFAAuthToken(ObtainAuthToken):
             })
         else:
             user = serializer.validated_data['user']
-            token_ttl = self.get_token_ttl()
+            token_ttl = knox_settings.TOKEN_TTL
             instance, token = AuthToken.objects.create(user, token_ttl)
             user_logged_in.send(sender=request.user.__class__, request=request, user=user)
 
