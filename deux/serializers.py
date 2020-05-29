@@ -56,7 +56,7 @@ class _BaseChallengeRequestSerializer(MultiFactorAuthSerializer):
         :raises NotImplemented: If the extending class does not define
             ``challenge_type``.
         """
-        raise NotImplemented  # pragma: no cover
+        raise NotImplementedError  # pragma: no cover
 
     def execute_challenge(self, instance):
         """
@@ -121,7 +121,7 @@ class _BaseChallengeVerifySerializer(MultiFactorAuthSerializer):
         :raises NotImplemented: If the extending class does not define
             ``challenge_type``.
         """
-        raise NotImplemented  # pragma: no cover
+        raise NotImplementedError  # pragma: no cover
 
     def validate(self, internal_data):
         """

@@ -69,7 +69,7 @@ class _BaseChallengeView(MultiFactorAuthMixin, generics.UpdateAPIView):
         :raises NotImplemented: If the extending class does not define
             ``challenge_type``.
         """
-        raise NotImplemented  # pragma: no cover
+        raise NotImplementedError  # pragma: no cover
 
 
 class SMSChallengeRequestDetail(_BaseChallengeView):

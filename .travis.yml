@@ -9,7 +9,6 @@ env:
   - DJANGO=2.1
   - DJANGO=2.2
   - DJANGO=3.0
-  - DJANGO=3.1
   - DJANGO=master
 matrix:
     include:
