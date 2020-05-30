@@ -44,11 +44,17 @@ class ObtainMFAAuthToken(ObtainAuthToken):
             user = serializer.validated_data['user']
             token_ttl = knox_settings.TOKEN_TTL
             instance, token = AuthToken.objects.create(user, token_ttl)
-            user_logged_in.send(sender=request.user.__class__, request=request, user=user)
+            user_logged_in.send(
+                sender=request.user.__class__,
+                request=request,
+                user=user
+            )
 
             datetime_format = knox_settings.EXPIRY_DATETIME_FORMAT
+            token_expiry = DateTimeField(format=datetime_format)\
+                .to_representation(instance.expiry)
 
             return Response({
-                'expiry': DateTimeField(format=datetime_format).to_representation(instance.expiry),
+                'expiry': token_expiry,
                 'token': token
             })
