@@ -1,10 +1,10 @@
 from __future__ import absolute_import, unicode_literals
 
-import six
 from mock import patch
 
 from django.urls import reverse
 from rest_framework import status
+from knox.settings import CONSTANTS
 
 from deux.app_settings import mfa_settings
 from deux.constants import SMS
@@ -58,6 +58,14 @@ class ObtainMFAAuthTokenTest(_BaseMFAViewTest):
         data["password"] = self.password1
         resp = self.check_post_response(
             self.url, status.HTTP_200_OK, data=data)
-        self.assertEqual(resp.data, {
-            "token": six.text_type(self.user1.auth_token),
-        })
+
+        auth_token_cookie = resp.cookies['auth_token']
+        self.assertTrue(auth_token_cookie['httponly'])
+
+        self.assertEqual(resp.data["token"], auth_token_cookie.value)
+
+        response_token_key = resp.data["token"][:CONSTANTS.TOKEN_KEY_LENGTH]
+        self.assertEqual(
+            response_token_key,
+            self.user1.auth_token_set.last().token_key
+        )
