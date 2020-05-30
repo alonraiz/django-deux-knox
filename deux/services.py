@@ -7,7 +7,7 @@ from django.utils.crypto import constant_time_compare
 from django_otp.oath import totp
 
 from deux.app_settings import mfa_settings
-from deux.constants import CHALLENGE_TYPES, SMS
+from deux.constants import CHALLENGE_TYPES, SMS, EMAIL
 
 
 def generate_mfa_code(bin_key, drift=0):
@@ -79,7 +79,8 @@ class MultiFactorChallenge(object):
         type of this object.
         """
         dispatch = {
-            SMS: self._sms_challenge
+            SMS: self._sms_challenge,
+            EMAIL: self._email_challenge,
         }
         for challenge in CHALLENGE_TYPES:
             assert challenge in dispatch, (
@@ -90,6 +91,12 @@ class MultiFactorChallenge(object):
 
     def _sms_challenge(self):
         """Executes the SMS challenge."""
-        code = generate_mfa_code(bin_key=self.instance.sms_bin_key)
+        code = generate_mfa_code(bin_key=self.instance.bin_key)
         mfa_settings.SEND_MFA_TEXT_FUNC(
+            mfa_instance=self.instance, mfa_code=code)
+
+    def _email_challenge(self):
+        """Executes the SMS challenge."""
+        code = generate_mfa_code(bin_key=self.instance.bin_key)
+        mfa_settings.SEND_MFA_EMAIL_FUNC(
             mfa_instance=self.instance, mfa_code=code)

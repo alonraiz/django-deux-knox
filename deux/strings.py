@@ -33,3 +33,6 @@ SMS_SEND_ERROR = _("SMS failed to send.")
 
 #: Message body for a MFA code.
 MFA_CODE_TEXT_MESSAGE = _("Two Factor Authentication Code: {code}")
+
+#: Message subject for a MFA code.
+MFA_CODE_TEXT_SUBJECT = _("Two Factor Authentication Details")

@@ -7,7 +7,7 @@ from django.db import models
 from django.utils.crypto import constant_time_compare
 
 from deux.app_settings import mfa_settings
-from deux.constants import CHALLENGE_TYPES, DISABLED, SMS
+from deux.constants import CHALLENGE_TYPES, DISABLED, SMS, EMAIL
 from deux.services import generate_key
 from deux.validators import phone_number_validator
 
@@ -23,6 +23,7 @@ class AbstractMultiFactorAuth(models.Model):
     #: Different status options for this MFA object.
     CHALLENGE_CHOICES = (
         (SMS, "SMS"),
+        (EMAIL, "EMAIL"),
         (DISABLED, "Off"),
     )
 
@@ -50,15 +51,15 @@ class AbstractMultiFactorAuth(models.Model):
     )
 
     #: Secret key used for SMS codes.
-    sms_secret_key = models.CharField(
+    secret_key = models.CharField(
         max_length=32, default=generate_key,
         help_text="Hex-Encoded Secret Key"
     )
 
     @property
-    def sms_bin_key(self):
+    def bin_key(self):
         """Returns binary data of the SMS secret key."""
-        return unhexlify(self.sms_secret_key)
+        return unhexlify(self.secret_key)
 
     @property
     def enabled(self):
@@ -85,7 +86,8 @@ class AbstractMultiFactorAuth(models.Model):
                 challenge=challenge_type)
         )
         return {
-            SMS: self.sms_bin_key
+            SMS: self.bin_key,
+            EMAIL: self.bin_key,
         }.get(challenge_type, None)
 
     def enable(self, challenge_type):

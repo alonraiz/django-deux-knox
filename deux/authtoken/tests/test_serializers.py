@@ -46,7 +46,7 @@ class MFAAuthTokenSerializerTest(BaseUserTestCase):
         self.mfa.enable(SMS)
         self.mfa.refresh_backup_code()
 
-        mfa_code = generate_mfa_code(self.mfa.sms_bin_key)
+        mfa_code = generate_mfa_code(self.mfa.bin_key)
         backup_code = self.mfa.backup_code
 
         serializer = MFAAuthTokenSerializer(data={
@@ -59,7 +59,7 @@ class MFAAuthTokenSerializerTest(BaseUserTestCase):
 
     def test_login_with_mfa_code(self):
         self.mfa.enable(SMS)
-        mfa_code = generate_mfa_code(self.mfa.sms_bin_key)
+        mfa_code = generate_mfa_code(self.mfa.bin_key)
         serializer = MFAAuthTokenSerializer(data={
             "username": self.user2.username,
             "password": self.password2,
@@ -128,7 +128,7 @@ class MFAAuthTokenSerializerTest(BaseUserTestCase):
         mfa_2.enable(SMS)
 
         # User 1 using User 2's MFA Code should fail.
-        mfa_2_code = generate_mfa_code(mfa_2.sms_bin_key)
+        mfa_2_code = generate_mfa_code(mfa_2.bin_key)
         serializer = MFAAuthTokenSerializer(data={
             "username": self.user1.username,
             "password": self.password1,
