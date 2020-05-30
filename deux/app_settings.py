@@ -17,6 +17,8 @@ DEFAULTS = {
     "TWILIO_ACCOUNT_SID": "",
     "TWILIO_AUTH_TOKEN": "",
     "TWILIO_SMS_POOL_SID": "",
+    "INCLUDE_TOKEN_IN_RESPONSE": True,
+    "AUTH_COOKIE": 'auth_token'
 }
 
 # List of settings that cannot be empty.

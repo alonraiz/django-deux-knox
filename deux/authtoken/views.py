@@ -8,6 +8,7 @@ from knox.settings import knox_settings
 from knox.models import AuthToken
 
 from deux.authtoken.serializers import MFAAuthTokenSerializer
+from deux.app_settings import mfa_settings
 
 
 class ObtainMFAAuthToken(ObtainAuthToken):
@@ -54,7 +55,21 @@ class ObtainMFAAuthToken(ObtainAuthToken):
             token_expiry = DateTimeField(format=datetime_format)\
                 .to_representation(instance.expiry)
 
-            return Response({
+            response_dict = {
                 'expiry': token_expiry,
-                'token': token
-            })
+            }
+
+            if mfa_settings.INCLUDE_TOKEN_IN_RESPONSE:
+                response_dict['token'] = token
+
+            response = Response(response_dict)
+
+            if mfa_settings.AUTH_COOKIE:
+                response.set_cookie(
+                    mfa_settings.AUTH_COOKIE,
+                    token,
+                    httponly=True,
+                    samesite='strict'
+                )
+
+            return response

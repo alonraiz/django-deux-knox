@@ -59,6 +59,11 @@ class ObtainMFAAuthTokenTest(_BaseMFAViewTest):
         resp = self.check_post_response(
             self.url, status.HTTP_200_OK, data=data)
 
+        auth_token_cookie = resp.cookies['auth_token']
+        self.assertTrue(auth_token_cookie['httponly'])
+
+        self.assertEqual(resp.data["token"], auth_token_cookie.value)
+
         response_token_key = resp.data["token"][:CONSTANTS.TOKEN_KEY_LENGTH]
         self.assertEqual(
             response_token_key,
