@@ -2,6 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 from twilio.rest import TwilioRestClient
 from twilio.base.exceptions import TwilioRestException
+from django.core.mail import send_mail
 
 from deux import strings
 from deux.app_settings import mfa_settings
@@ -43,3 +44,13 @@ def send_mfa_code_text_message(mfa_instance, mfa_code):
         if e.code == NOT_SMS_DEVICE_CODE:
             raise InvalidPhoneNumberError()
         raise TwilioMessageError()
+
+
+def send_mfa_code_email(mfa_instance, mfa_code):
+    send_mail(
+        strings.MFA_CODE_TEXT_SUBJECT,
+        strings.MFA_CODE_TEXT_MESSAGE.format(code=mfa_code),
+        None,
+        [mfa_instance.user.email],
+        fail_silently=False,
+    )

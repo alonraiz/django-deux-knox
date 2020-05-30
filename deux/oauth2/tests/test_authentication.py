@@ -42,7 +42,7 @@ class MFAOAuth2TokenTests(BaseUserTestCase):
         self.mfa.phone_number = self.phone_number
         self.mfa.save()
         self.backup_code = self.mfa.refresh_backup_code()
-        self.mfa_code = generate_mfa_code(self.mfa.sms_bin_key)
+        self.mfa_code = generate_mfa_code(self.mfa.bin_key)
 
     def test_incorrect_credentials(self):
         data = self._get_data(

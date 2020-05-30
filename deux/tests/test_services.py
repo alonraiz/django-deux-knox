@@ -4,11 +4,12 @@ import six
 from binascii import unhexlify
 from mock import patch
 
+from django.core import mail
 from django.test import TestCase
 from django_otp.util import random_hex
 
 from deux.app_settings import mfa_settings
-from deux.constants import SMS
+from deux.constants import SMS, EMAIL
 from deux.services import (
     MultiFactorChallenge,
     generate_mfa_code,
@@ -78,6 +79,13 @@ class MultiFactorChallengeTests(BaseUserTestCase):
         text_function.assert_called_once_with(
             mfa_instance=self.mfa,
             mfa_code="123456")
+
+    @patch("deux.services.generate_mfa_code")
+    def test_email_challenge(self, generate_mfa_code):
+        generate_mfa_code.return_value = "123456"
+        MultiFactorChallenge(self.mfa, EMAIL).generate_challenge()
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn('123456', mail.outbox[0].body)
 
     def test_invalid_challenge(self):
         fail_tests = ("SMS", "abc", 123)

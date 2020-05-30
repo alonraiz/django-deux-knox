@@ -155,7 +155,7 @@ class SMSChallengeVerifyViewTest(_BaseMFAViewTest):
         })
 
     def test_success(self):
-        mfa_code = generate_mfa_code(self.mfa_1.sms_bin_key)
+        mfa_code = generate_mfa_code(self.mfa_1.bin_key)
         resp = self.check_put_response(
             self.url, status.HTTP_200_OK, user=self.user1,
             data={"mfa_code": mfa_code}

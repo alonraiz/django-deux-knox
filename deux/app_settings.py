@@ -13,6 +13,7 @@ DEFAULTS = {
     "MFA_CODE_NUM_DIGITS": 6,
     "MFA_MODEL": "deux.models.MultiFactorAuth",
     "SEND_MFA_TEXT_FUNC": "deux.notifications.send_mfa_code_text_message",
+    "SEND_MFA_EMAIL_FUNC": "deux.notifications.send_mfa_code_email",
     "STEP_SIZE": 30,
     "TWILIO_ACCOUNT_SID": "",
     "TWILIO_AUTH_TOKEN": "",
@@ -28,6 +29,7 @@ MANDATORY = ()
 IMPORT_STRINGS = (
     'MFA_MODEL',
     'SEND_MFA_TEXT_FUNC',
+    'SEND_MFA_EMAIL_FUNC',
 )
 
 
@@ -48,7 +50,7 @@ def import_from_string(val, setting_name):
         module = importlib.import_module(module_path)
         return getattr(module, class_name)
     except ImportError:
-        msg = "Coud not import {val} for setting {setting_name}".format(
+        msg = "Could not import {val} for setting {setting_name}".format(
             val=val, setting_name=setting_name)
         raise ImportError(msg)
 
