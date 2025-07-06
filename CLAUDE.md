@@ -32,8 +32,8 @@ black --check --diff deux
 isort --check-only --diff deux
 
 # Security scanning
-bandit -r deux
-safety check
+bandit -r deux  # Should show 0 issues with current codebase
+safety check --ignore-unpinned-requirements  # No known vulnerabilities
 ```
 
 ### Django Operations
@@ -161,3 +161,7 @@ OAUTH2_PROVIDER = {
 4. **Password Hashers**: Avoid SHA1/MD5 hashers (removed for security)
 5. **OAuth2 Secrets**: Handle client secret hashing in tests properly
 6. **Middleware**: Use `MIDDLEWARE` not `MIDDLEWARE_CLASSES`
+7. **Twilio Compatibility**: Uses modern Twilio Client API (9.6.x+) with secure PyJWT 2.x
+8. **Six Library**: Removed - uses native Python 3 strings instead of `six.text_type`
+9. **Assert Statements**: Replaced with proper ValueError exceptions (bandit B101)
+10. **Test Credentials**: Use `# nosec` comments for legitimate test credentials

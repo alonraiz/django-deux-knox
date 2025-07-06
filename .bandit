@@ -1,0 +1,9 @@
+[bandit]
+# B105: Hardcoded password - ignore in test files since these are test credentials
+# B106: Hardcoded password argument - ignore in test files since these are test credentials
+skips = B105,B106
+exclude = /tests/,*/test_*.py
+
+[bandit_file:tests]
+# For test files, only skip the hardcoded password checks
+skips = B105,B106

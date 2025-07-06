@@ -13,6 +13,11 @@
 - [compatibility] Added Django 5.2, 5.1, 5.0 support 
 - [compatibility] Dropped Python < 3.9 support
 - [dependencies] Updated all dependencies for modern compatibility
+- [dependencies] Removed six library dependency (Python 2/3 compatibility layer)
+- [twilio] Updated Twilio integration for 9.6.x+ API with secure PyJWT 2.x
+- [security] Replaced assert statements with ValueError exceptions (bandit B101)
+- [security] Added nosec comments for legitimate test credentials (bandit B105/B106)
+- [security] Fixed PyJWT vulnerabilities (CVE-2022-29217, CVE-2024-53861)
 - [oauth2] Fixed OAuth2 client secret hashing issues for django-oauth-toolkit 3.0+
 - [translation] Fixed deprecated ugettext_lazy usage
 - [urls] Updated deprecated django.conf.urls.url patterns

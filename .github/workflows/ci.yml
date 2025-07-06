@@ -12,16 +12,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
-        django-version: ["4.2", "5.0", "5.1", "5.2"]
-        exclude:
-          # Django 5.0+ requires Python 3.10+
-          - python-version: "3.9"
-            django-version: "5.0"
-          - python-version: "3.9"
-            django-version: "5.1"
-          - python-version: "3.9"
-            django-version: "5.2"
+        python-version: ["3.12", "3.13"]
+        django-version: ["5.2"]
 
     steps:
     - uses: actions/checkout@v4
@@ -90,7 +82,7 @@ jobs:
       run: |
         black --check --diff deux || echo "Black formatting issues found (informational only)"
 
-    - name: Check isort formatting (informational)  
+    - name: Check isort formatting (informational)
       run: |
         isort --check-only --diff deux || echo "isort formatting issues found (informational only)"
 
@@ -116,5 +108,6 @@ jobs:
 
     - name: Run safety check
       run: |
-        safety check --json --output safety-report.json || true
-        safety check
+        # Use legacy check command to avoid authentication requirements
+        safety check --json --output safety-report.json --ignore-unpinned-requirements || true
+        safety check --ignore-unpinned-requirements

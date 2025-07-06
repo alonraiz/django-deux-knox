@@ -78,13 +78,14 @@ class AbstractMultiFactorAuth(models.Model):
         :param challenge_type: The challenge type the key is requested for.
                                The type must be in the supported
                                `CHALLENGE_TYPES`.
-        :raises AssertionError: If ``challenge_type`` is not a supported
+        :raises ValueError: If ``challenge_type`` is not a supported
                                 challenge type.
         """
-        assert challenge_type in CHALLENGE_TYPES, (
-            "'{challenge}' is not a valid challenge type.".format(
-                challenge=challenge_type)
-        )
+        if challenge_type not in CHALLENGE_TYPES:
+            raise ValueError(
+                "'{challenge}' is not a valid challenge type.".format(
+                    challenge=challenge_type)
+            )
         return {
             SMS: self.bin_key,
             EMAIL: self.bin_key,
@@ -99,13 +100,14 @@ class AbstractMultiFactorAuth(models.Model):
 
         :param challenge_type: Enable MFA for this type of challenge. The type
                                must be in the supported `CHALLENGE_TYPES`.
-        :raises AssertionError: If ``challenge_type`` is not a supported
+        :raises ValueError: If ``challenge_type`` is not a supported
                                 challenge type.
         """
-        assert challenge_type in CHALLENGE_TYPES, (
-            "'{challenge}' is not a valid challenge type.".format(
-                challenge=challenge_type)
-        )
+        if challenge_type not in CHALLENGE_TYPES:
+            raise ValueError(
+                "'{challenge}' is not a valid challenge type.".format(
+                    challenge=challenge_type)
+            )
         self.challenge_type = challenge_type
         self.backup_key = generate_key()
         self.save()
@@ -127,10 +129,11 @@ class AbstractMultiFactorAuth(models.Model):
         Refreshes the users backup key and returns a new backup code.
 
         This method should be used to request new backup codes for the user.
+        
+        :raises ValueError: If MFA is not enabled.
         """
-        assert self.enabled, (
-            "MFA must be on to run refresh_backup_codes."
-        )
+        if not self.enabled:
+            raise ValueError("MFA must be on to run refresh_backup_codes.")
         self.backup_key = generate_key()
         self.save()
         return self.backup_code

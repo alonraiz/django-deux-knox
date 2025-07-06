@@ -89,5 +89,5 @@ class MultiFactorChallengeTests(BaseUserTestCase):
     def test_invalid_challenge(self):
         fail_tests = ("SMS", "abc", 123)
         for test in fail_tests:
-            with self.assertRaises(AssertionError):
+            with self.assertRaises(ValueError):
                 MultiFactorChallenge(self.mfa, test)

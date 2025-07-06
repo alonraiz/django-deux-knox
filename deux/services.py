@@ -66,9 +66,8 @@ class MultiFactorChallenge(object):
     """
 
     def __init__(self, instance, challenge_type):
-        assert challenge_type in CHALLENGE_TYPES, (
-            "Inputted challenge type is not supported."
-        )
+        if challenge_type not in CHALLENGE_TYPES:
+            raise ValueError("Inputted challenge type is not supported.")
         self.instance = instance
         self.challenge_type = challenge_type
 
@@ -82,10 +81,11 @@ class MultiFactorChallenge(object):
             EMAIL: self._email_challenge,
         }
         for challenge in CHALLENGE_TYPES:
-            assert challenge in dispatch, (
-                "'{challenge}' does not have a challenge dispatch "
-                "method.".format(challenge=challenge)
-            )
+            if challenge not in dispatch:
+                raise ValueError(
+                    "'{challenge}' does not have a challenge dispatch "
+                    "method.".format(challenge=challenge)
+                )
         return dispatch[self.challenge_type]()
 
     def _sms_challenge(self):

@@ -49,7 +49,7 @@ class MFAOAuth2TokenTests(BaseUserTestCase):
 
     def test_incorrect_credentials(self):
         data = self._get_data(
-            username=self.user1.username, password="wrong password")
+            username=self.user1.username, password="wrong password")  # nosec B106
         response = self.check_post_response(
             self.url, status.HTTP_400_BAD_REQUEST, data=data,
             headers=self.headers)
