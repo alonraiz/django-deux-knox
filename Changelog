@@ -2,8 +2,44 @@
  Changelog
 ==========
 
-1.2.0
-=====
+1.2.1 (Current)
+===============
+:release-date: 2025-07-05
+:release-by: Enhanced Fork Maintainers
+
+**Major Compatibility Updates:**
+
+- [compatibility] Added Python 3.13 support
+- [compatibility] Added Django 5.2, 5.1, 5.0 support 
+- [compatibility] Dropped Python < 3.9 support
+- [dependencies] Updated all dependencies for modern compatibility
+- [oauth2] Fixed OAuth2 client secret hashing issues for django-oauth-toolkit 3.0+
+- [translation] Fixed deprecated ugettext_lazy usage
+- [urls] Updated deprecated django.conf.urls.url patterns
+- [tests] Updated mock imports from external package to unittest.mock
+- [settings] Updated MIDDLEWARE_CLASSES to MIDDLEWARE
+- [security] Replaced insecure password hashers (SHA1, MD5)
+
+**CI/CD & Development:**
+
+- [ci] Added comprehensive GitHub Actions CI/CD pipeline
+- [ci] Added test matrix across Python 3.9-3.13 and Django 4.2-5.2
+- [ci] Added automated security scanning with Bandit and Safety
+- [ci] Added code quality checks with flake8, black, isort
+- [ci] Added Codecov integration with 99% test coverage
+- [ci] Added Dependabot for automated dependency updates
+- [docs] Complete README modernization with badges and examples
+- [security] Added security policy and vulnerability reporting guidelines
+
+**Infrastructure:**
+
+- [config] Added pyproject.toml for modern Python project configuration
+- [config] Enhanced setup.py with project URLs and Python version requirements
+- [config] Updated flake8, black, and isort configurations
+- [templates] Added GitHub issue/PR templates and workflows documentation
+
+1.2.0 (Original)
+=================
 :release-date: 2016-10-28 06:00 P.M PDT
 :release-by: Abhishek Fatehpuria
 

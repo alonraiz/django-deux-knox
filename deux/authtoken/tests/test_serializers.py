@@ -1,7 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
 import six
-from mock import patch
+from unittest.mock import patch
 
 from deux.app_settings import mfa_settings
 from deux.constants import DISABLED, SMS

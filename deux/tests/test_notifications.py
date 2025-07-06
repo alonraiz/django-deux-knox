@@ -1,6 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
-from mock import Mock, patch
+from unittest.mock import Mock, patch
 from twilio.base.exceptions import TwilioRestException
 
 from deux.app_settings import mfa_settings

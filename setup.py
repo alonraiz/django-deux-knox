@@ -20,17 +20,14 @@ NAME = 'deux'
 E_UNSUPPORTED_PYTHON = '%s 1.2.0 requires %%s %%s or later!' % (NAME,)
 
 PYIMP = _pyimp()
-PY26_OR_LESS = sys.version_info < (2, 7)
 PY3 = sys.version_info[0] == 3
-PY33_OR_LESS = PY3 and sys.version_info < (3, 4)
+PY38_OR_LESS = PY3 and sys.version_info < (3, 9)
 PYPY_VERSION = getattr(sys, 'pypy_version_info', None)
 PYPY = PYPY_VERSION is not None
 PYPY24_ATLEAST = PYPY_VERSION and PYPY_VERSION >= (2, 4)
 
-if PY26_OR_LESS:
-    raise Exception(E_UNSUPPORTED_PYTHON % (PYIMP, '2.7'))
-elif PY33_OR_LESS and not PYPY24_ATLEAST:
-    raise Exception(E_UNSUPPORTED_PYTHON % (PYIMP, '3.4'))
+if PY38_OR_LESS and not PYPY24_ATLEAST:
+    raise Exception(E_UNSUPPORTED_PYTHON % (PYIMP, '3.9'))
 
 # -*- Classifiers -*-
 
@@ -38,16 +35,19 @@ classes = """
     Development Status :: 4 - Beta
     License :: OSI Approved :: BSD License
     Programming Language :: Python
-    Programming Language :: Python :: 2
-    Programming Language :: Python :: 2.7
     Programming Language :: Python :: 3
-    Programming Language :: Python :: 3.4
-    Programming Language :: Python :: 3.5
+    Programming Language :: Python :: 3.9
+    Programming Language :: Python :: 3.10
+    Programming Language :: Python :: 3.11
+    Programming Language :: Python :: 3.12
+    Programming Language :: Python :: 3.13
     Programming Language :: Python :: Implementation :: CPython
     Programming Language :: Python :: Implementation :: PyPy
     Framework :: Django
-    Framework :: Django :: 1.9
-    Framework :: Django :: 1.10
+    Framework :: Django :: 4.2
+    Framework :: Django :: 5.0
+    Framework :: Django :: 5.1
+    Framework :: Django :: 5.2
     Operating System :: OS Independent
 """
 classifiers = [s.strip() for s in classes.split('\n') if s]
@@ -116,10 +116,15 @@ def reqs(*f):
 
 # -*- Long Description -*-
 
-if os.path.exists('README.rst'):
+if os.path.exists('README.md'):
+    long_description = codecs.open('README.md', 'r', 'utf-8').read()
+    long_description_content_type = 'text/markdown'
+elif os.path.exists('README.rst'):
     long_description = codecs.open('README.rst', 'r', 'utf-8').read()
+    long_description_content_type = 'text/x-rst'
 else:
-    long_description = 'See http://pypi.python.org/pypi/%s' % (NAME,)
+    long_description = 'Enhanced multi-factor authentication for Django Rest Framework with Knox token integration'
+    long_description_content_type = 'text/plain'
 
 
 setup(
@@ -138,4 +143,12 @@ setup(
     tests_require=reqs('test.txt'),
     classifiers=classifiers,
     long_description=long_description,
+    long_description_content_type=long_description_content_type,
+    project_urls={
+        'Bug Reports': 'https://github.com/aloncortex/django-deux-knox/issues',
+        'Source': 'https://github.com/aloncortex/django-deux-knox',
+        'Documentation': 'https://github.com/aloncortex/django-deux-knox#readme',
+        'Changelog': 'https://github.com/aloncortex/django-deux-knox/blob/master/Changelog',
+    },
+    python_requires='>=3.9',
 )

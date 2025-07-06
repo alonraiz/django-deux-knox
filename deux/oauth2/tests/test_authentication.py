@@ -4,7 +4,7 @@ import json
 import six
 import sys
 from base64 import b64encode
-from mock import patch
+from unittest.mock import patch
 from oauth2_provider.models import get_application_model
 
 from django.urls import reverse
@@ -28,13 +28,17 @@ class MFAOAuth2TokenTests(BaseUserTestCase):
 
     def setUp(self):
         self.simpleUserSetup()
-        self.application = Application.objects.create(
+        self.application = Application(
             name="Test Password Application",
             user=self.user1,
             authorization_grant_type=Application.GRANT_PASSWORD,
         )
+        # Store the raw client secret before saving (which hashes it)
+        raw_client_secret = self.application.client_secret
+        self.application.save()
+
         self.headers = self._get_basic_auth_header(
-            self.application.client_id, self.application.client_secret)
+            self.application.client_id, raw_client_secret)
 
         self.mfa = mfa_settings.MFA_MODEL.objects.create(user=self.user2)
         self.mfa.enable(SMS)

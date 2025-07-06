@@ -1,6 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 #: Error if user submits both MFA and backup code for authentication.
 BOTH_CODES_ERROR = _(

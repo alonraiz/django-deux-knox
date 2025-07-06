@@ -2,7 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 import six
 from binascii import unhexlify
-from mock import patch
+from unittest.mock import patch
 
 from django.core import mail
 from django.test import TestCase
