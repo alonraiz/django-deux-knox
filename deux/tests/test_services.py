@@ -1,6 +1,5 @@
 from __future__ import absolute_import, unicode_literals
 
-import six
 from binascii import unhexlify
 from unittest.mock import patch
 
@@ -57,7 +56,7 @@ class VerifyMFACodeTests(TestCase):
             generate_mfa_code(self.bin_key, -2),
             generate_mfa_code(self.bin_key, 2),
             generate_mfa_code(self.bin_key, 3),
-            six.text_type(int_mfa_code + 1).zfill(
+            str(int_mfa_code + 1).zfill(
                 mfa_settings.MFA_CODE_NUM_DIGITS),
             "abcdef"
         )

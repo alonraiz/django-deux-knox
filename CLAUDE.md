@@ -140,6 +140,7 @@ OAUTH2_PROVIDER = {
 - **Core**: django-rest-knox, django-otp, twilio
 - **OAuth2**: django-oauth-toolkit 3.0+
 - **Testing**: unittest.mock (not external mock package)
+- **Note**: `six` library removed - uses native Python 3 strings/text types
 
 ## URL Structure
 

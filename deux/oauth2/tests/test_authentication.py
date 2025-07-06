@@ -1,7 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
 import json
-import six
 import sys
 from base64 import b64encode
 from unittest.mock import patch
@@ -99,7 +98,7 @@ class MFAOAuth2TokenTests(BaseUserTestCase):
         self._assert_authenticated(response)
 
     def test_login_fail_with_invalid_mfa_code(self):
-        bad_code = six.text_type(int(self.mfa_code) + 1)
+        bad_code = str(int(self.mfa_code) + 1)
         data = self._get_data(mfa_code=bad_code)
         response = self.check_post_response(
             self.url, status.HTTP_400_BAD_REQUEST, data=data,

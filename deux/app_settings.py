@@ -1,7 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
 import importlib
-import six
 
 from django.conf import settings
 
@@ -35,7 +34,7 @@ IMPORT_STRINGS = (
 
 def perform_import(val, setting_name):
 
-    if isinstance(val, six.string_types):
+    if isinstance(val, str):
         return import_from_string(val, setting_name)
     elif isinstance(val, (list, tuple)):
         return [import_from_string(item, setting_name) for item in val]
