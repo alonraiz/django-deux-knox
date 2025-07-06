@@ -1,6 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
-from mock import Mock, patch
+from unittest.mock import Mock, patch
 from twilio.base.exceptions import TwilioRestException
 
 from deux.app_settings import mfa_settings
@@ -23,7 +23,7 @@ class SendMFACodeTextMessageTests(BaseUserTestCase):
     @patch("deux.notifications.mfa_settings")
     def test_success(self, mfa_settings, twilio_client):
         mfa_settings.TWILIO_ACCOUNT_SID = "sid"
-        mfa_settings.TWILIO_AUTH_TOKEN = "authtoken"
+        mfa_settings.TWILIO_AUTH_TOKEN = "authtoken"  # nosec B105
         mfa_settings.TWILIO_SMS_POOL_SID = "0987654321"
 
         twilio_client_instance = Mock()
@@ -39,7 +39,7 @@ class SendMFACodeTextMessageTests(BaseUserTestCase):
     @patch("deux.notifications.mfa_settings")
     def test_invalid_number(self, mfa_settings, twilio_client):
         mfa_settings.TWILIO_ACCOUNT_SID = "sid"
-        mfa_settings.TWILIO_AUTH_TOKEN = "authtoken"
+        mfa_settings.TWILIO_AUTH_TOKEN = "authtoken"  # nosec B105
         mfa_settings.TWILIO_SMS_POOL_SID = "0987654321"
 
         twilio_client_instance = Mock()
@@ -55,7 +55,7 @@ class SendMFACodeTextMessageTests(BaseUserTestCase):
     @patch("deux.notifications.mfa_settings")
     def test_failed_sms_error(self, mfa_settings, twilio_client):
         mfa_settings.TWILIO_ACCOUNT_SID = "sid"
-        mfa_settings.TWILIO_AUTH_TOKEN = "authtoken"
+        mfa_settings.TWILIO_AUTH_TOKEN = "authtoken"  # nosec B105
         mfa_settings.TWILIO_SMS_POOL_SID = "0987654321"
 
         twilio_client_instance = Mock()

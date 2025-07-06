@@ -1,6 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
-from mock import patch
+from unittest.mock import patch
 
 from django.urls import reverse
 from rest_framework import status

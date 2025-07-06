@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'deux',
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -105,18 +105,22 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-PASSWORD_HASHERS = (
-    'django.contrib.auth.hashers.SHA1PasswordHasher',
+PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
     'django.contrib.auth.hashers.BCryptPasswordHasher',
-    'django.contrib.auth.hashers.MD5PasswordHasher',
-    'django.contrib.auth.hashers.CryptPasswordHasher',
-)
+    'django.contrib.auth.hashers.ScryptPasswordHasher',
+]
 
 
 DEUX = {
     "TWILIO_ACCOUNT_SID": "",
     "TWILIO_AUTH_TOKEN": "",
     "TWILIO_SMS_POOL_SID": "",
+}
+
+# OAuth2 provider settings for testing
+OAUTH2_PROVIDER = {
+    'HASH_CLIENT_SECRET': False,  # Disable client secret hashing for testing
 }

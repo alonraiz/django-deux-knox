@@ -1,6 +1,5 @@
 from __future__ import absolute_import, unicode_literals
 
-import six
 from uuid import uuid4
 
 from django.utils.crypto import constant_time_compare
@@ -18,7 +17,7 @@ def generate_mfa_code(bin_key, drift=0):
     :param bin_key: The secret key to be converted into an MFA code
     :param drift: Number of time steps to shift the conversion.
     """
-    return six.text_type(totp(
+    return str(totp(
         bin_key,
         step=mfa_settings.STEP_SIZE,
         digits=mfa_settings.MFA_CODE_NUM_DIGITS,
@@ -67,9 +66,8 @@ class MultiFactorChallenge(object):
     """
 
     def __init__(self, instance, challenge_type):
-        assert challenge_type in CHALLENGE_TYPES, (
-            "Inputted challenge type is not supported."
-        )
+        if challenge_type not in CHALLENGE_TYPES:
+            raise ValueError("Inputted challenge type is not supported.")
         self.instance = instance
         self.challenge_type = challenge_type
 
@@ -83,10 +81,11 @@ class MultiFactorChallenge(object):
             EMAIL: self._email_challenge,
         }
         for challenge in CHALLENGE_TYPES:
-            assert challenge in dispatch, (
-                "'{challenge}' does not have a challenge dispatch "
-                "method.".format(challenge=challenge)
-            )
+            if challenge not in dispatch:
+                raise ValueError(
+                    "'{challenge}' does not have a challenge dispatch "
+                    "method.".format(challenge=challenge)
+                )
         return dispatch[self.challenge_type]()
 
     def _sms_challenge(self):

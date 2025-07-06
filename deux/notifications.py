@@ -1,7 +1,13 @@
 from __future__ import absolute_import, unicode_literals
 
-from twilio.rest import TwilioRestClient
-from twilio.base.exceptions import TwilioRestException
+try:
+    # Twilio 6.x+
+    from twilio.rest import Client as TwilioRestClient
+    from twilio.base.exceptions import TwilioException as TwilioRestException
+except ImportError:
+    # Fallback for older Twilio versions
+    from twilio.rest import TwilioRestClient
+    from twilio.base.exceptions import TwilioRestException
 from django.core.mail import send_mail
 
 from deux import strings

@@ -1,0 +1,113 @@
+name: CI
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13"]
+        django-version: ["5.2"]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ matrix.django-version }}-${{ hashFiles('**/requirements/*.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ matrix.django-version }}-
+          ${{ runner.os }}-pip-${{ matrix.python-version }}-
+          ${{ runner.os }}-pip-
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install Django==${{ matrix.django-version }}
+        pip install -r requirements/default.txt
+        pip install -r requirements/test.txt
+        pip install -r requirements/test-ci.txt
+
+    - name: Run system checks
+      run: |
+        python manage.py check --settings=test_proj.settings
+
+    - name: Run tests with coverage
+      run: |
+        coverage run --source='deux' manage.py test --settings=test_proj.settings
+        coverage xml
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+
+    - name: Install linting tools
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 black isort
+
+    - name: Run flake8
+      run: |
+        flake8 deux --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 deux --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    - name: Check black formatting (informational)
+      run: |
+        black --check --diff deux || echo "Black formatting issues found (informational only)"
+
+    - name: Check isort formatting (informational)
+      run: |
+        isort --check-only --diff deux || echo "isort formatting issues found (informational only)"
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+
+    - name: Install security tools
+      run: |
+        python -m pip install --upgrade pip
+        pip install bandit safety
+
+    - name: Run bandit security check
+      run: |
+        bandit -r deux -f json -o bandit-report.json || true
+        bandit -r deux
+
+    - name: Run safety check
+      run: |
+        # Use legacy check command to avoid authentication requirements
+        safety check --json --output safety-report.json --ignore-unpinned-requirements || true
+        safety check --ignore-unpinned-requirements

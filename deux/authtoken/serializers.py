@@ -45,7 +45,8 @@ class MFAAuthTokenSerializer(AuthTokenSerializer):
         attrs = super(MFAAuthTokenSerializer, self).validate(attrs)
         # User must exist if super method didn't throw error.
         user = attrs["user"]
-        assert user is not None, "User should exist after super call."
+        if user is None:
+            raise ValueError("User should exist after super call.")
 
         mfa = getattr(user, "multi_factor_auth", None)
 

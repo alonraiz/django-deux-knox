@@ -37,8 +37,8 @@ class MultiFactorAuthTests(BaseUserTestCase):
         self.assertEqual(self.mfa.phone_number, "12345678900")
 
     def test_backup_code_generation(self):
-        # AssertionError if disabled.
-        with self.assertRaises(AssertionError):
+        # ValueError if disabled.
+        with self.assertRaises(ValueError):
             self.mfa.refresh_backup_code()
 
         # Valid backup code if enabled.
